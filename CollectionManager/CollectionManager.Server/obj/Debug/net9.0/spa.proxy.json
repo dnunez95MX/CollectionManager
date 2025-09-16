@@ -1,0 +1,10 @@
+{
+"SpaProxyServer": {
+"ServerUrl": "https://localhost:50708",
+"RedirectUrl": "",
+"LaunchCommand": "npm run dev",
+"WorkingDirectory": "C:\\Users\\dnunez\\source\\repos\\CollectionManager\\CollectionManager\\CollectionManager.Server\\..\\collectionmanager.client",
+"MaxTimeoutInSeconds": "120",
+"KeepRunning": "false"
+}
+}

@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "m8/xP1v5eFs=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\dnunez\\source\\repos\\CollectionManager\\CollectionManager\\CollectionManager.Server\\CollectionManager.Server.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dnunez\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.6\\microsoft.aspnetcore.openapi.9.0.6.nupkg.sha512",
+    "C:\\Users\\dnunez\\.nuget\\packages\\microsoft.aspnetcore.spaproxy\\9.0.9\\microsoft.aspnetcore.spaproxy.9.0.9.nupkg.sha512",
+    "C:\\Users\\dnunez\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512",
+    "C:\\Users\\dnunez\\.nuget\\packages\\microsoft.net.sdk.compilers.toolset\\9.0.301\\microsoft.net.sdk.compilers.toolset.9.0.301.nupkg.sha512"
+  ],
+  "logs": []
+}
