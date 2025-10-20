@@ -9,5 +9,6 @@ namespace CollectionManager.Server
         {
         }
         public DbSet<Jersey> Jerseys { get; set; }
+        public DbSet<Logs> Logs { get; set; }
     }
 }

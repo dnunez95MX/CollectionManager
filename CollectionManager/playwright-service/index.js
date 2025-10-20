@@ -67,10 +67,6 @@ app.get("/search", async (req, res) => {
 
     const page = await context.newPage();
 
-    // Go to Vinted search page so the anti-bot JS runs and cookies are set
-    // const catalogUrl = `https://www.vinted.de/api/v2/catalog/items?search_text=${encodeURIComponent(
-    //   query
-    // )}`;
     const catalogUrl = `https://www.vinted.de/catalog?search_text=${encodeURIComponent(
       query
     )}&size_ids[]=209`;
@@ -78,7 +74,6 @@ app.get("/search", async (req, res) => {
 
     const pageApi = await context.newPage();
 
-    // Execute fetch from inside the page context to obtain the API JSON (this uses the same browser context)
     const apiUrl = `https://www.vinted.de/api/v2/catalog/items?search_text=${encodeURIComponent(
       query
     )}&size_ids[]=209&per_page=500`;
@@ -96,13 +91,12 @@ app.get("/search", async (req, res) => {
       pageApi.goto(apiUrl), // navega a la página JSON
     ]);
 
-    // Obtener los datos como JSON
     const data = await response.json();
-    console.log(data); // ya tienes los datos listos
     // Clean up context to release cookies/memory
     await context.close();
     currentConcurrent--;
 
+    console.log(data);
     return res.json({ ok: true, data });
   } catch (err) {
     currentConcurrent = Math.max(0, currentConcurrent - 1);

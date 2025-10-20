@@ -24,7 +24,9 @@ const queryBuilder = (params) => {
     }
   }
 
-  return searchQuery;
+  // return searchQuery;
+  console.log(searchQuery);
+  return { query: team, per_page: 10 };
 };
 
 export default queryBuilder;

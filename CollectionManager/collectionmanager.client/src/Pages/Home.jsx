@@ -8,6 +8,8 @@ const Home = () => {
       <button>
         <Link to="search">Jalate</Link>
       </button>
+
+      <Link to="logs">Logs</Link>
     </>
   );
 };

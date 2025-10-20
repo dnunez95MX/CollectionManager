@@ -1,4 +1,6 @@
 using CollectionManager.Server;
+using CollectionManager.Server.Interfaces;
+using CollectionManager.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
+builder.Services.AddScoped<IInformationLogService, InformationLogService>();
 
 builder.Services.AddDbContext<CollectionManagerContext>(options =>
     options.UseNpgsql(

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CollectionManager.Server.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System.Net.Http;
 using System.Text.Json;
@@ -14,15 +15,20 @@ namespace CollectionManager.Server.Controllers
         private readonly IMemoryCache _memoryCache;
         private readonly IHttpClientFactory _httpClient;
         private readonly IConfiguration _configuration;
+
+        private readonly IInformationLogService _informationLogService;
+
         private readonly string _playwrightUrl;
         private readonly string _playwrightKey;
-        public VintedProxyController(IMemoryCache memoryCache, IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public VintedProxyController(IMemoryCache memoryCache, IConfiguration configuration, IInformationLogService infoService, IHttpClientFactory httpClientFactory)
         {
             _memoryCache = memoryCache;
             _configuration = configuration;
             _playwrightUrl = _configuration.GetValue<string>("Playwright:Url") ?? "http://localhost:4000";
-            _playwrightKey = _configuration.GetValue<string>("Playwright:ApiKey") ?? "mi-secret-key-123";
+            _playwrightKey = _configuration.GetValue<string>("Playwright:ApiKey") ?? "";
             _httpClient = httpClientFactory;
+
+            _informationLogService = infoService;
         }
 
         [HttpGet("search")]
@@ -47,11 +53,10 @@ namespace CollectionManager.Server.Controllers
                 return StatusCode((int)resp.StatusCode, body);
             }
 
-            // retornamos tal cual la estructura del microservicio
             var json = JsonDocument.Parse(body).RootElement;
-
-            // opcional: extraer data.items y mapear a modelos si quieres
             var result = json.GetProperty("data").ToString();
+
+            await _informationLogService.LogLatestSearch($"Searched Vinted for '{query}' at {DateTime.Now}.");
 
             // cache corto
             _memoryCache.Set(cacheKey, JsonDocument.Parse(result).RootElement, TimeSpan.FromSeconds(15));
