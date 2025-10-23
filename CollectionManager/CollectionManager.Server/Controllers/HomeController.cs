@@ -31,9 +31,8 @@ namespace CollectionManager.Server.Controllers
             return Enumerable.Range(1, 5).Select(index => new Jersey
             {
                 Id = index,
-                Name = $"Jersey {index}",
                 Team = $"Team {index}",
-                Leage = $"Leage {index}",
+                League = $"League {index}",
                 IsFlocked = index % 2 == 0,
                 JerseyName = $"Player {index}",
                 JerseyNumber = index * 10
@@ -49,7 +48,7 @@ namespace CollectionManager.Server.Controllers
                 return BadRequest();
             }
             // Here you would typically add the jersey to a database
-            _logger.LogInformation($"Received new jersey: {jersey.Name}, Team: {jersey.Team}");
+            _logger.LogInformation($"Received new jersey. Team: {jersey.Team}");
             return CreatedAtAction(nameof(Get), new { id = jersey.Id }, jersey);
         }
     }

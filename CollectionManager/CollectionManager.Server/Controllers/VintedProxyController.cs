@@ -1,4 +1,5 @@
-﻿using CollectionManager.Server.Interfaces;
+﻿using CollectionManager.Server.DTOs;
+using CollectionManager.Server.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System.Net.Http;
@@ -53,15 +54,21 @@ namespace CollectionManager.Server.Controllers
                 return StatusCode((int)resp.StatusCode, body);
             }
 
-            var json = JsonDocument.Parse(body).RootElement;
-            var result = json.GetProperty("data").ToString();
+            var searchLogs = await _informationLogService.GetSearchLogs();
+            var latestSearch = searchLogs.OrderByDescending(log => log.UpdatedAt).FirstOrDefault();
 
-            await _informationLogService.LogLatestSearch($"Searched Vinted for '{query}' at {DateTime.Now}.");
+            var json = JsonDocument.Parse(body).RootElement;
+            var result = json.GetProperty("items");
+            List<JerseySearchResultDto> searchResults = JsonSerializer.Deserialize<List<JerseySearchResultDto>>(result);
+
+            var filteredResults = searchResults.Where(x => x.PostedAt > (latestSearch?.UpdatedAt ?? DateTime.MinValue)).ToList();
+
+            await _informationLogService.LogLatestSearch($"Searched Vinted for '{query}' at {DateTime.Now}. Recolected {filteredResults.Count}");
 
             // cache corto
-            _memoryCache.Set(cacheKey, JsonDocument.Parse(result).RootElement, TimeSpan.FromSeconds(15));
+            _memoryCache.Set(cacheKey, JsonDocument.Parse(result.ToString()).RootElement, TimeSpan.FromSeconds(15));
 
-            return Content(result, "application/json");
+            return Content(JsonSerializer.Serialize(filteredResults), "application/json");
         }
 
         // GET: api/<ValuesController>

@@ -2,6 +2,7 @@ const express = require("express");
 const { chromium } = require("playwright");
 const pino = require("pino");
 const pretty = require("pino-pretty");
+const { default: responseHandler } = require("./utils/responseHandler");
 const log = pino(pretty());
 
 require("dotenv").config();
@@ -18,6 +19,14 @@ let browser; // reuse browser
 let launching = false;
 const MAX_CONCURRENT = 2;
 let currentConcurrent = 0;
+
+const EMAIL = process.env.VINTED_USRNAME;
+const PASSWORD = process.env.VINTED_PASSWRD;
+
+if (!EMAIL || !PASSWORD) {
+  console.error("Invalid user and/or password");
+  process.exit(1);
+}
 
 async function ensureBrowser() {
   if (browser) return browser;
@@ -49,8 +58,6 @@ app.get("/search", async (req, res) => {
     }
 
     currentConcurrent++;
-    const per_page = parseInt(req.query.per_page) || 10;
-    const pageNum = parseInt(req.query.page) || 1;
 
     const br = await ensureBrowser();
     const browser = await chromium.launch({
@@ -70,7 +77,7 @@ app.get("/search", async (req, res) => {
     const catalogUrl = `https://www.vinted.de/catalog?search_text=${encodeURIComponent(
       query
     )}&size_ids[]=209`;
-    await page.goto(catalogUrl, { waitUntil: "networkidle" });
+    await page.goto(catalogUrl, { waitUntil: "domcontentloaded" });
 
     const pageApi = await context.newPage();
 
@@ -96,8 +103,11 @@ app.get("/search", async (req, res) => {
     await context.close();
     currentConcurrent--;
 
-    console.log(data);
-    return res.json({ ok: true, data });
+    const handledResult = responseHandler(data, query);
+
+    console.log(handledResult);
+
+    return res.json({ ok: true, items: handledResult });
   } catch (err) {
     currentConcurrent = Math.max(0, currentConcurrent - 1);
     log.error(err);

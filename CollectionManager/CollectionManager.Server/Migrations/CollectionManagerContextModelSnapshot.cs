@@ -22,7 +22,7 @@ namespace CollectionManager.Server.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CollectionManager.Server.Models.Jersey", b =>
+            modelBuilder.Entity("CollectionManager.Server.Models.CollectionItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,28 +33,35 @@ namespace CollectionManager.Server.Migrations
                     b.Property<bool>("IsFlocked")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsLongSleeve")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsMainRack")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("JerseyName")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("JerseyNumber")
+                    b.Property<int?>("JerseyNumber")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Leage")
+                    b.Property<string>("League")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("Location")
                         .HasColumnType("text");
 
                     b.Property<string>("Team")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Year")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Jerseys");
+                    b.ToTable("CollectionItems");
                 });
 
             modelBuilder.Entity("CollectionManager.Server.Models.Logs", b =>
@@ -75,6 +82,91 @@ namespace CollectionManager.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Logs");
+                });
+
+            modelBuilder.Entity("CollectionManager.Server.Models.SaleItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Condition")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsFlocked")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsLongSleeve")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("JerseyName")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("JerseyNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("League")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Team")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DroppedItems");
+                });
+
+            modelBuilder.Entity("CollectionManager.Server.Models.SearchItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsFlocked")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsLongSleeve")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("JerseyName")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("JerseyNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("League")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("SetValue")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Team")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MonitoringSearches");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import "./HomePage.scss";
 
-const Home = () => {
+const HomePage = () => {
   return (
-    <>
+    <div className="dashboard">
       <h1>Eres un pendejooo</h1>
       <h5>Joto</h5>
       <button>
@@ -10,8 +11,8 @@ const Home = () => {
       </button>
 
       <Link to="logs">Logs</Link>
-    </>
+    </div>
   );
 };
 
-export default Home;
+export default HomePage;

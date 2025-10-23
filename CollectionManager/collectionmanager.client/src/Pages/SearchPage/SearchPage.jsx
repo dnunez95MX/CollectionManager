@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input, Select, Space } from "antd";
-import axios_instance from "../utils/apiconfig";
+import SearchResults from "../../components/SearchResults/SearchResults.jsx";
+
+import axios_instance from "../../utils/apiconfig.js";
 import axios from "axios";
-import queryBuilder from "../utils/query_builder";
+import queryBuilder from "../../utils/query_builder.js";
 
 const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 
-const Search = () => {
+const SearchPage = () => {
   const [response, setResponse] = useState("");
   const [size, setSize] = useState("");
 
@@ -42,7 +44,7 @@ const Search = () => {
       const res = await axios_instance.get("api/vintedproxy/search", {
         params,
       });
-      setResponse(res.data.items);
+      setResponse(res);
       console.log(response);
     } catch (err) {
       if (err.response) {
@@ -105,12 +107,9 @@ const Search = () => {
           </Space>
         </Form.Item>
       </Form>
-
-      <h1>Response</h1>
-      {response &&
-        response.map((item, index) => <li key={index}>{item.title}</li>)}
+      {response && <SearchResults searchResults={response} />}
     </>
   );
 };
 
-export default Search;
+export default SearchPage;

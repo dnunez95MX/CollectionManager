@@ -8,7 +8,9 @@ namespace CollectionManager.Server
         public CollectionManagerContext(DbContextOptions options) : base(options) 
         {
         }
-        public DbSet<Jersey> Jerseys { get; set; }
+        public DbSet<CollectionItem> CollectionItems { get; set; }
+        public DbSet<SearchItem> MonitoringSearches { get; set; }
+        public DbSet<SaleItem> DroppedItems { get; set; }
         public DbSet<Logs> Logs { get; set; }
     }
 }
